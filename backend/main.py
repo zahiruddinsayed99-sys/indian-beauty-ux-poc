@@ -88,17 +88,20 @@ class CheckoutRequest(BaseModel):
 @app.post("/api/v1/cart/checkout")
 def checkout(req: CheckoutRequest):
     import uuid
+    from datetime import datetime
     order_id = f"ord_{uuid.uuid4().hex[:8]}"
     order = {
         "order_id": order_id,
         "status": "Placed",
         "payment_status": "Pending",
         "total_amount_inr": req.total_amount_inr,
-        "items": req.cart_items
+        "items": req.cart_items,
+        "created_at": datetime.utcnow().isoformat() + "Z"
     }
     orders.append(order)
     return {
         "order_id": order_id,
+        "timestamp": order["created_at"],
         "razorpay_mock": {
             "key": "rzp_test_mock",
             "amount": req.total_amount_inr * 100,
