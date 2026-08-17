@@ -1,4 +1,4 @@
-Here is the neatly formatted `README.md` content, ready for you to copy and paste into your repository:
+## README.MD
 
 ```markdown
 # Indian Beauty UX POC - Frontend
@@ -10,7 +10,7 @@ This is the Angular frontend for the E-Commerce Proof of Concept, built with Tai
 ## 🚀 Getting Started
 
 ### Prerequisites
-*   **Node.js**: v18+
+*   **Node.js**: v18+ 
 *   **Angular CLI**: v19
 *   **Python 3**: For backend dev server
 
