@@ -21,7 +21,7 @@ import { CartService } from '../cart.service';
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       <div *ngFor="let p of products" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700 hover:shadow-xl transition-shadow flex flex-col">
-        <div class="relative h-64 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+        <div class="relative h-48 bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
           <img [src]="p.image" alt="product" class="object-cover w-full h-full" />
           <div *ngIf="p.stock <= 5" class="absolute top-2 left-2 bg-red-100 text-red-700 text-xs font-bold px-2 py-1 rounded shadow-sm border border-red-200">
             ⚡ Only {{p.stock}} left!

@@ -40,7 +40,7 @@ import { ApiService } from '../api.service';
               <span class="text-2xl">🛍️</span>
             </div>
             <div>
-              <h4 class="font-bold text-lg cursor-pointer hover:text-pink-600 transition-colors" [routerLink]="['/product', item.id]">{{item.name}}</h4>
+              <h4 class="font-bold text-lg cursor-pointer hover:text-primary-600 transition-colors" [routerLink]="['/product', item.id]">{{item.name}}</h4>
               <div class="flex items-center gap-3 mt-2">
                 <button (click)="cart.updateQuantity(item.id, -1)" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors font-bold text-gray-600">-</button>
                 <span class="font-medium w-4 text-center">{{item.quantity}}</span>
@@ -60,7 +60,6 @@ import { ApiService } from '../api.service';
           </a>
         </div>
       </div>
-    </div>
   `
 })
 export class CartComponent implements OnInit {

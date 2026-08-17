@@ -105,7 +105,7 @@ import { FormsModule, NgForm } from '@angular/forms';
             <span>₹{{cart.finalPrice()}}</span>
           </div>
 
-          <button (click)="initiateCheckout()" [disabled]="checkoutForm?.invalid || cart.cartItems().length === 0" class="w-full bg-pink-600 hover:bg-pink-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl shadow-lg transition-transform transform active:scale-95 flex items-center justify-center gap-2">
+          <button (click)="initiateCheckout()" [disabled]="checkoutForm?.invalid || cart.cartItems().length === 0" class="w-full bg-primary-600 hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl shadow-lg transition-transform transform active:scale-95 flex items-center justify-center gap-2">
             ⚡ Express Guest Checkout
           </button>
         </div>
