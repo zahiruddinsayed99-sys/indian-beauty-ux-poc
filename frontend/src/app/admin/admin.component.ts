@@ -9,13 +9,13 @@ import { ConfirmDialogComponent } from './confirm-dialog.component';
   standalone: true,
   imports: [CommonModule, MatDialogModule],
   template: `
-    <div class="bg-white rounded-xl shadow-lg p-8 max-w-6xl mx-auto">
-      <div class="flex justify-between items-center mb-8 border-b border-gray-200 pb-4">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 max-w-6xl mx-auto">
+      <div class="flex justify-between items-center mb-8 border-b border-gray-200 dark:border-gray-700 pb-4">
         <h2 class="text-3xl font-bold flex items-center gap-3">
           <span class="bg-gray-800 text-white p-2 rounded-lg text-xl">🛡️</span>
           Admin Dashboard
         </h2>
-        <button (click)="loadOrders()" class="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded shadow-sm flex items-center gap-2">
+        <button (click)="loadOrders()" class="bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 text-gray-800 dark:text-gray-100 font-bold py-2 px-4 rounded shadow-sm flex items-center gap-2">
           🔄 Refresh
         </button>
       </div>
@@ -23,7 +23,7 @@ import { ConfirmDialogComponent } from './confirm-dialog.component';
       <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse">
           <thead>
-            <tr class="bg-gray-50 text-gray-600 text-sm uppercase tracking-wider">
+            <tr class="bg-gray-50 dark:bg-gray-900 text-gray-600 text-sm uppercase tracking-wider">
               <th class="p-4 font-bold rounded-tl-lg">Order ID</th>
               <th class="p-4 font-bold">Date/Time (IST)</th>
               <th class="p-4 font-bold">Items</th>
@@ -34,13 +34,13 @@ import { ConfirmDialogComponent } from './confirm-dialog.component';
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-100">
-            <tr *ngFor="let order of orders" class="hover:bg-gray-50 transition-colors">
+            <tr *ngFor="let order of orders" class="hover:bg-gray-50 dark:bg-gray-900 transition-colors">
               <td class="p-4 font-mono text-sm font-bold">{{order.order_id}}</td>
               <td class="p-4 text-sm text-gray-600">{{order.created_at ? (order.created_at | date:'medium':'IST') : 'N/A'}}</td>
               <td class="p-4 text-sm text-gray-600">
                 <div *ngFor="let item of order.items">{{item.name}} (x{{item.quantity}})</div>
               </td>
-              <td class="p-4 font-bold text-gray-800">₹{{order.total_amount_inr}}</td>
+              <td class="p-4 font-bold text-gray-800 dark:text-gray-100">₹{{order.total_amount_inr}}</td>
               <td class="p-4">
                 <span class="px-2 py-1 rounded text-xs font-bold"
                       [ngClass]="order.payment_status === 'SUCCESS' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'">

@@ -19,6 +19,10 @@ export class CartService {
   timerInterval: any;
   isBrowser: boolean;
 
+  totalItems = computed(() => {
+    return this.cartItems().reduce((acc, item) => acc + item.quantity, 0);
+  });
+
   totalPrice = computed(() => {
     return this.cartItems().reduce((acc, item) => acc + (item.price * item.quantity), 0);
   });
@@ -30,6 +34,16 @@ export class CartService {
 
   constructor(@Inject(PLATFORM_ID) platformId: Object) {
     this.isBrowser = isPlatformBrowser(platformId);
+  }
+
+  addCustomKit(product: any, selections: string[], customBundleId: string) {
+    this.addToCart({
+      id: customBundleId,
+      name: `${product.name} (Custom Vanity Kit: ${selections.join(', ')})`,
+      price: product.selling_price_inr,
+      quantity: 1,
+      isCustomBundle: true
+    });
   }
 
   addToCart(item: CartItem) {
