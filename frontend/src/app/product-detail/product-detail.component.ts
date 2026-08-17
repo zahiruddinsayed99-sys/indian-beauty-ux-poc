@@ -16,7 +16,7 @@ import { CartService } from '../cart.service';
     <div *ngIf="product" class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col md:flex-row gap-8">
       <div class="md:w-1/2">
         <div class="h-96 bg-gray-200 rounded-lg flex items-center justify-center overflow-hidden">
-          <img [src]="product.image" alt="Product" class="object-cover w-full h-full opacity-50" />
+          <img [src]="product.image" alt="Product" class="object-cover w-full h-full" />
         </div>
       </div>
 
