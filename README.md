@@ -1,4 +1,4 @@
-Here is the neatly formatted `README.md` content, ready for you to copy and paste into your repository:
+## README.MD
 
 ```markdown
 # Indian Beauty UX POC - Frontend
