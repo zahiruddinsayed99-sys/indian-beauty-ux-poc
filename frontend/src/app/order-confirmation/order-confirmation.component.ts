@@ -12,19 +12,19 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
         <span class="text-5xl">🎉</span>
       </div>
 
-      <h1 class="text-4xl font-extrabold text-gray-900 mb-4">Order Confirmed!</h1>
+      <h1 class="text-4xl font-extrabold text-gray-900 dark:text-gray-100 mb-4">Order Confirmed!</h1>
       <p class="text-xl text-gray-600 mb-8">Thank you for shopping with us.</p>
 
-      <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8 inline-block text-left w-full max-w-sm">
+      <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 mb-8 inline-block text-left w-full max-w-sm">
         <p class="text-sm text-gray-500 font-bold mb-1 uppercase tracking-wider">ORDER ID</p>
-        <p class="text-2xl font-mono font-bold text-gray-800">{{orderId}}</p>
+        <p class="text-2xl font-mono font-bold text-gray-800 dark:text-gray-100">{{orderId}}</p>
       </div>
 
       <!-- Reciprocity: Bonus Offer -->
-      <div class="bg-gradient-to-r from-pink-500 to-purple-500 p-8 rounded-2xl shadow-xl text-white transform transition-transform hover:scale-105">
+      <div class="bg-gradient-to-r from-primary-500 to-purple-500 p-8 rounded-2xl shadow-xl text-white transform transition-transform hover:scale-105">
         <h3 class="text-2xl font-bold mb-3 flex items-center justify-center gap-2">🎁 Exclusive Bonus Offer!</h3>
         <p class="text-lg mb-6">Claim your Free Mini Sample Kit on your next order.</p>
-        <button class="bg-white text-pink-600 font-bold py-3 px-8 rounded-full shadow hover:bg-gray-50 transition-colors">
+        <button class="bg-white dark:bg-gray-800 text-primary-600 font-bold py-3 px-8 rounded-full shadow hover:bg-gray-50 dark:bg-gray-900 transition-colors">
           Claim Now
         </button>
       </div>
