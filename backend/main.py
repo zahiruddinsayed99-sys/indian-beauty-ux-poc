@@ -1,5 +1,7 @@
 from fastapi import FastAPI, HTTPException, Body
 from fastapi.middleware.cors import CORSMiddleware
+import uuid
+from datetime import datetime
 from pydantic import BaseModel
 from typing import List, Optional
 
@@ -16,7 +18,24 @@ app.add_middleware(
 # Mock DB
 orders = []
 
-mock_img = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc0MDAnIGhlaWdodD0nMzAwJz48cmVjdCB3aWR0aD0nNDAwJyBoZWlnaHQ9JzMwMCcgZmlsbD0nI2YwZjBmMCcvPjx0ZXh0IHg9JzUwJScgeT0nNTAlJyBkb21pbmFudC1iYXNlbGluZT0nbWlkZGxlJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmb250LXNpemU9JzIwJyBmb250LWZhbWlseT0nc2Fucy1zZXJpZic+cHJvZHVjdDwvdGV4dD48L3N2Zz4="
+import base64
+
+def generate_svg_data_uri(name: str) -> str:
+    # Generate a pseudo-random hue based on the product name
+    hash_val = sum(ord(c) for c in name)
+    hue = hash_val % 360
+    color = f"hsl({hue}, 70%, 80%)"
+
+    # Initials
+    initials = "".join([w[0] for w in name.split() if w])[:2].upper()
+
+    svg = f'''<svg xmlns='http://www.w3.org/2000/svg' width='400' height='300'>
+      <rect width='400' height='300' fill='{color}'/>
+      <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' font-size='60' font-weight='bold' fill='#333' font-family='sans-serif'>{initials}</text>
+    </svg>'''
+
+    b64 = base64.b64encode(svg.encode('utf-8')).decode('utf-8')
+    return f"data:image/svg+xml;base64,{b64}"
 
 @app.get("/api/v1/products")
 def get_products():
@@ -28,7 +47,7 @@ def get_products():
             "selling_price_inr": 549,
             "category": "Cosmetics",
             "stock": 2,
-            "image": mock_img
+            "image": generate_svg_data_uri("Matte Liquid Lipstick")
         },
         {
             "id": "2",
@@ -37,7 +56,7 @@ def get_products():
             "selling_price_inr": 899,
             "category": "Cosmetics",
             "stock": 15,
-            "image": mock_img
+            "image": generate_svg_data_uri("Glow Highlighter Palette")
         },
         {
             "id": "3",
@@ -46,7 +65,7 @@ def get_products():
             "selling_price_inr": 1299,
             "category": "Grooming",
             "stock": 5,
-            "image": mock_img
+            "image": generate_svg_data_uri("Pro Beard Trimmer")
         }
     ]
 
@@ -87,8 +106,8 @@ class CheckoutRequest(BaseModel):
 
 @app.post("/api/v1/cart/checkout")
 def checkout(req: CheckoutRequest):
-    import uuid
-    from datetime import datetime
+
+
     order_id = f"ord_{uuid.uuid4().hex[:8]}"
     order = {
         "order_id": order_id,
