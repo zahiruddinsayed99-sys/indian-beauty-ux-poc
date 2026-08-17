@@ -58,6 +58,27 @@ export class CartService {
     this.startTimer();
   }
 
+  updateQuantity(id: string, delta: number) {
+    const items = [...this.cartItems()];
+    const existing = items.find(i => i.id === id);
+    if (existing) {
+      existing.quantity += delta;
+      if (existing.quantity <= 0) {
+        this.removeItem(id);
+        return;
+      }
+      this.cartItems.set(items);
+    }
+  }
+
+  removeItem(id: string) {
+    const items = this.cartItems().filter(i => i.id !== id);
+    this.cartItems.set(items);
+    if (items.length === 0) {
+      this.clearCart();
+    }
+  }
+
   applyDiscount(amount: number) {
     this.discount.set(amount);
   }

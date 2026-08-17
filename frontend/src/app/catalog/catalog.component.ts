@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ApiService } from '../api.service';
 import { CartService } from '../cart.service';
 
 @Component({
   selector: 'app-catalog',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, MatSnackBarModule],
   template: `
     <div class="flex justify-between items-center mb-6">
       <h2 class="text-3xl font-bold text-gray-800 dark:text-gray-100">Bestsellers</h2>
@@ -54,6 +55,7 @@ import { CartService } from '../cart.service';
 })
 export class CatalogComponent implements OnInit {
   products: any[] = [];
+  private snackBar = inject(MatSnackBar);
 
   constructor(private api: ApiService, private cart: CartService) {}
 
@@ -73,6 +75,11 @@ export class CatalogComponent implements OnInit {
       name: p.name,
       price: p.selling_price_inr,
       quantity: 1
+    });
+    this.snackBar.open(`${p.name} added to cart`, 'Close', {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
     });
   }
 }
