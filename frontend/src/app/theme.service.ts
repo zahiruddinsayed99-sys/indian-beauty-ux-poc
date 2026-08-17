@@ -6,12 +6,12 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class ThemeService {
   isDarkMode = signal<boolean>(false);
-  themeColor = signal<string>('primary');
+  themeColor = signal<string>('pink');
 
   isBrowser: boolean;
 
   colors: Record<string, Record<string, string>> = {
-    primary: {
+    pink: {
       '--color-primary-50': '#fdf2f8',
       '--color-primary-100': '#fce7f3',
       '--color-primary-200': '#fbcfe8',
