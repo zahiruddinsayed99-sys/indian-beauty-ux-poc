@@ -53,7 +53,6 @@ import { ApiService } from '../api.service';
             <button (click)="cart.removeItem(item.id)" class="text-red-500 hover:text-red-700 text-sm font-medium transition-colors">Remove</button>
           </div>
         </div>
-      </div>
         <div class="mt-8">
           <a routerLink="/checkout" class="block w-full bg-primary-600 hover:bg-primary-700 text-white text-center font-bold py-4 rounded-xl text-lg shadow-lg transition-transform transform active:scale-95">
             Proceed to Checkout
@@ -64,7 +63,7 @@ import { ApiService } from '../api.service';
   `
 })
 export class CartComponent implements OnInit {
-  constructor(public cart: CartService, private api: ApiService) {}
+  constructor(public cart: CartService, private api: ApiService) { }
 
   ngOnInit() {
     if (this.cart.cartItems().length > 0 && this.cart.discount() === 0) {
