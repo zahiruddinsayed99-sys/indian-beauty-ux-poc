@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { CartService } from '../cart.service';
 import { ApiService } from '../api.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-checkout',
@@ -24,19 +24,34 @@ import { FormsModule } from '@angular/forms';
         <!-- Smart Defaults Section -->
         <div class="bg-white p-6 rounded-xl shadow-md mb-6">
           <h3 class="text-xl font-bold mb-4 flex items-center gap-2"><span class="bg-gray-800 text-white w-6 h-6 rounded-full inline-flex items-center justify-center text-sm">1</span> Contact & Shipping</h3>
-          <div class="space-y-4">
-            <input type="email" placeholder="Email for Order Updates" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-pink-500 outline-none">
-            <div class="flex gap-4">
-              <input type="text" [(ngModel)]="defaults.address_defaults.pincode" placeholder="Pincode" class="w-1/2 border border-gray-300 rounded-lg p-3 outline-none">
-              <input type="text" [(ngModel)]="defaults.address_defaults.city" placeholder="City" class="w-1/2 border border-gray-300 rounded-lg p-3 outline-none">
+          <form #checkoutForm="ngForm" class="space-y-4">
+            <div>
+              <input type="email" name="email" [(ngModel)]="email" required email #emailCtrl="ngModel" placeholder="Email for Order Updates" class="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-pink-500 outline-none" [ngClass]="{'border-red-500': emailCtrl.invalid && emailCtrl.touched}">
+              <p *ngIf="emailCtrl.invalid && emailCtrl.touched" class="text-red-500 text-xs mt-1">Please enter a valid email address.</p>
             </div>
-            <textarea placeholder="Full Address" class="w-full border border-gray-300 rounded-lg p-3 outline-none h-24"></textarea>
+            <div class="flex gap-4">
+              <div class="w-1/2">
+                <input type="text" name="pincode" [(ngModel)]="defaults.address_defaults.pincode" required pattern="[0-9]{6}" #pincodeCtrl="ngModel" placeholder="Pincode (6 digits)" class="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-pink-500" [ngClass]="{'border-red-500': pincodeCtrl.invalid && pincodeCtrl.touched}">
+                <p *ngIf="pincodeCtrl.invalid && pincodeCtrl.touched" class="text-red-500 text-xs mt-1">Enter valid 6-digit Pincode.</p>
+              </div>
+              <div class="w-1/2">
+                <input type="text" name="city" [(ngModel)]="defaults.address_defaults.city" required #cityCtrl="ngModel" placeholder="City" class="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-pink-500" [ngClass]="{'border-red-500': cityCtrl.invalid && cityCtrl.touched}">
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="w-1/2">
+                <input type="text" name="state" [(ngModel)]="defaults.address_defaults.state" required #stateCtrl="ngModel" placeholder="State" class="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-pink-500" [ngClass]="{'border-red-500': stateCtrl.invalid && stateCtrl.touched}">
+              </div>
+              <div class="w-1/2">
+                <input type="text" name="street" [(ngModel)]="defaults.address_defaults.street" required #streetCtrl="ngModel" placeholder="Street Address" class="w-full border border-gray-300 rounded-lg p-3 outline-none focus:ring-2 focus:ring-pink-500" [ngClass]="{'border-red-500': streetCtrl.invalid && streetCtrl.touched}">
+              </div>
+            </div>
 
-            <label class="flex items-center gap-2 font-medium text-gray-700 cursor-pointer">
+            <label class="flex items-center gap-2 font-medium text-gray-700 cursor-pointer mt-4">
               <input type="checkbox" checked class="w-5 h-5 text-pink-600 rounded">
               Billing address same as shipping
             </label>
-          </div>
+          </form>
         </div>
 
         <div class="bg-white p-6 rounded-xl shadow-md">
@@ -90,7 +105,7 @@ import { FormsModule } from '@angular/forms';
             <span>₹{{cart.finalPrice()}}</span>
           </div>
 
-          <button (click)="initiateCheckout()" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-4 rounded-xl shadow-lg transition-transform transform active:scale-95 flex items-center justify-center gap-2">
+          <button (click)="initiateCheckout()" [disabled]="checkoutForm?.invalid || cart.cartItems().length === 0" class="w-full bg-pink-600 hover:bg-pink-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl shadow-lg transition-transform transform active:scale-95 flex items-center justify-center gap-2">
             ⚡ Express Guest Checkout
           </button>
         </div>
@@ -127,9 +142,12 @@ import { FormsModule } from '@angular/forms';
 })
 export class CheckoutComponent implements OnInit {
   defaults: any = { address_defaults: {} };
+  email = '';
   showModal = false;
   currentOrderId = '';
   rzpMock: any = {};
+
+  @ViewChild('checkoutForm') checkoutForm!: NgForm;
 
   constructor(public cart: CartService, private api: ApiService, private router: Router) {}
 
@@ -140,6 +158,11 @@ export class CheckoutComponent implements OnInit {
   }
 
   initiateCheckout() {
+    if (this.checkoutForm.invalid) {
+      this.checkoutForm.form.markAllAsTouched();
+      return;
+    }
+
     this.api.checkout({
       cart_items: this.cart.cartItems(),
       total_amount_inr: this.cart.finalPrice()

@@ -35,25 +35,37 @@ import { ApiService } from '../api.service';
 
       <div *ngIf="cart.cartItems().length > 0">
         <div *ngFor="let item of cart.cartItems()" class="flex justify-between items-center py-4 border-b border-gray-200">
-          <div>
-            <h4 class="font-bold text-lg">{{item.name}}</h4>
-            <p class="text-gray-500 text-sm">Qty: {{item.quantity}}</p>
+          <div class="flex items-center gap-4">
+            <div class="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden flex-shrink-0 cursor-pointer" [routerLink]="['/product', item.id]">
+              <span class="text-2xl">🛍️</span>
+            </div>
+            <div>
+              <h4 class="font-bold text-lg cursor-pointer hover:text-pink-600 transition-colors" [routerLink]="['/product', item.id]">{{item.name}}</h4>
+              <div class="flex items-center gap-3 mt-2">
+                <button (click)="cart.updateQuantity(item.id, -1)" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors font-bold text-gray-600">-</button>
+                <span class="font-medium w-4 text-center">{{item.quantity}}</span>
+                <button (click)="cart.updateQuantity(item.id, 1)" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors font-bold text-gray-600">+</button>
+              </div>
+            </div>
           </div>
-          <div class="font-bold text-xl">₹{{item.price * item.quantity}}</div>
+          <div class="flex flex-col items-end gap-2">
+            <div class="font-bold text-xl">{{ (item.price * item.quantity) | currency:'INR':'symbol':'1.0-0' }}</div>
+            <button (click)="cart.removeItem(item.id)" class="text-red-500 hover:text-red-700 text-sm font-medium transition-colors">Remove</button>
+          </div>
         </div>
 
         <div class="mt-8 space-y-3">
           <div class="flex justify-between text-gray-600">
             <span>Subtotal</span>
-            <span>₹{{cart.totalPrice()}}</span>
+            <span>{{cart.totalPrice() | currency:'INR':'symbol':'1.0-0'}}</span>
           </div>
           <div class="flex justify-between text-green-600 font-bold">
             <span>Voucher Applied (FIRSTGLOW200)</span>
-            <span>-₹{{cart.discount()}}</span>
+            <span>-{{cart.discount() | currency:'INR':'symbol':'1.0-0'}}</span>
           </div>
           <div class="flex justify-between text-2xl font-bold pt-4 border-t border-gray-200">
             <span>Total</span>
-            <span>₹{{cart.finalPrice()}}</span>
+            <span>{{cart.finalPrice() | currency:'INR':'symbol':'1.0-0'}}</span>
           </div>
         </div>
 

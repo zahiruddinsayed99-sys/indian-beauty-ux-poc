@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ApiService } from '../api.service';
+import { ConfirmDialogComponent } from './confirm-dialog.component';
 
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatDialogModule],
   template: `
     <div class="bg-white rounded-xl shadow-lg p-8 max-w-6xl mx-auto">
       <div class="flex justify-between items-center mb-8 border-b border-gray-200 pb-4">
@@ -23,6 +25,7 @@ import { ApiService } from '../api.service';
           <thead>
             <tr class="bg-gray-50 text-gray-600 text-sm uppercase tracking-wider">
               <th class="p-4 font-bold rounded-tl-lg">Order ID</th>
+              <th class="p-4 font-bold">Date/Time (IST)</th>
               <th class="p-4 font-bold">Items</th>
               <th class="p-4 font-bold">Amount</th>
               <th class="p-4 font-bold">Payment</th>
@@ -33,6 +36,7 @@ import { ApiService } from '../api.service';
           <tbody class="divide-y divide-gray-100">
             <tr *ngFor="let order of orders" class="hover:bg-gray-50 transition-colors">
               <td class="p-4 font-mono text-sm font-bold">{{order.order_id}}</td>
+              <td class="p-4 text-sm text-gray-600">{{order.created_at ? (order.created_at | date:'medium':'IST') : 'N/A'}}</td>
               <td class="p-4 text-sm text-gray-600">
                 <div *ngFor="let item of order.items">{{item.name}} (x{{item.quantity}})</div>
               </td>
@@ -65,7 +69,7 @@ import { ApiService } from '../api.service';
               </td>
             </tr>
             <tr *ngIf="orders.length === 0">
-              <td colspan="6" class="p-8 text-center text-gray-500">No orders found.</td>
+              <td colspan="7" class="p-8 text-center text-gray-500">No orders found.</td>
             </tr>
           </tbody>
         </table>
@@ -76,7 +80,7 @@ import { ApiService } from '../api.service';
 export class AdminComponent implements OnInit {
   orders: any[] = [];
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService, private dialog: MatDialog) {}
 
   ngOnInit() {
     this.loadOrders();
@@ -89,8 +93,16 @@ export class AdminComponent implements OnInit {
   }
 
   updateStatus(id: string, status: string) {
-    this.api.updateOrderStatus(id, status).subscribe(() => {
-      this.loadOrders();
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      data: { status }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.api.updateOrderStatus(id, status).subscribe(() => {
+          this.loadOrders();
+        });
+      }
     });
   }
 }
